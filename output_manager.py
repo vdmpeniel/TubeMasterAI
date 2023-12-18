@@ -10,7 +10,7 @@ class OutputManager:
     def print_output_chain(self):
         os.system('cls' if os.name == 'nt' else 'clear')
         for line in self.output_chain:
-            print(f'{line}\n')
+            print(f'{line}')
 
     def update_progress_bar(self, bar_length=50, progress=0):
         block = int(round(bar_length * progress / 100))
@@ -21,4 +21,4 @@ class OutputManager:
     def log_message(self, message, progress):
         self.output_chain.append(message)
         self.print_output_chain()
-        self.update_progress_bar(progress)
+        self.update_progress_bar(progress=progress)

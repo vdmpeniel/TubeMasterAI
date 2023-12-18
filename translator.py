@@ -59,8 +59,8 @@ def translate_argos(text, from_code='en', to_code='es'):
         lambda x: x.code == to_code,
         installed_languages))[0]
 
-    translation = from_lang.get_translation(to_lang)
-    translated_text = translation.translate(text)
+    translator = from_lang.get_translation(to_lang)
+    translated_text = translator.translate(text)
     return translated_text
 
 

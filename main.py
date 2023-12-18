@@ -1,5 +1,5 @@
 import time
-import logic
+import media_processor
 import translator
 import media_downloader
 
@@ -9,15 +9,24 @@ import telemetry
 def main(title):
     print(title)
 
-    processor = logic.FullVideoProcessor(
+    processor = media_processor.MediaProcessor(
         '123',
-        '001',
-        'https://www.youtube.com/watch?v=Fx1Qp_a-OBI',
-        'video1.mkv',
-        'en',
-        'es',
-        'high')
-    processor.video_transcription_node()
+        '001'
+    )
+
+    vd_options = {
+        'url': 'https://www.youtube.com/watch?v=Fx1Qp_a-OBI',
+        'video_filename': 'video1.mkv',
+    }
+    processor.video_download_node(vd_options)
+
+    vtta_options = {
+        'video_filename': 'video1.mkv',
+        'source_language': 'en',
+        'target_language': 'es',
+        'level': 'low'
+    }
+    processor.video_to_translated_audio_node(vtta_options)
 
     # to be able to actually translate a text completely we need to introduce pauses and
     # split the text using those pause symbols

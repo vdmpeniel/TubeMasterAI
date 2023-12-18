@@ -206,10 +206,10 @@ def add_punctuation_spacy(text, language_code='en', mode='efficiency'):
     return corrected_text
 
 
-def correct_text(transcription, language_code):
-    transcription['text'] = add_punctuation_spacy(transcription['text'], language_code, 'efficiency')
-    transcription['text'] = full_text_correction_lt(transcription['text'], language_code)
-    return transcription
+def correct_text(text, language_code):
+    text = add_punctuation_spacy(text, language_code, 'efficiency')
+    text = full_text_correction_lt(text, language_code)
+    return text
 
 
 # def add_punctuation(transcription):
