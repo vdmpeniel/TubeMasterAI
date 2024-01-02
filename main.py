@@ -15,18 +15,18 @@ def main(title):
     )
 
     vd_options = {
-        'url': 'https://www.youtube.com/watch?v=Fx1Qp_a-OBI',
+        'url': 'https://player-vz-96dbff48-568.tv.pandavideo.com/embed/?v=db4d860f-15e7-4730-8d89-69066c9b0fa3',
         'video_filename': 'video1.mkv',
     }
     processor.video_download_node(vd_options)
 
-    vtta_options = {
-        'video_filename': 'video1.mkv',
-        'source_language': 'en',
-        'target_language': 'es',
-        'level': 'low'
-    }
-    processor.video_to_translated_audio_node(vtta_options)
+    # vtta_options = {
+    #     'video_filename': 'video1.mkv',
+    #     'source_language': 'en',
+    #     'target_language': 'es',
+    #     'level': 'low'
+    # }
+    # processor.video_to_translated_audio_node(vtta_options)
 
     # to be able to actually translate a text completely we need to introduce pauses and
     # split the text using those pause symbols
