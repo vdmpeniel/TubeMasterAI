@@ -1,0 +1,5 @@
+Collecting networkx
+  Using cached networkx-3.2.1-py3-none-any.whl.metadata (5.2 kB)
+Using cached networkx-3.2.1-py3-none-any.whl (1.6 MB)
+Installing collected packages: networkx
+Successfully installed networkx-3.2.1

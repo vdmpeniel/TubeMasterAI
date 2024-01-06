@@ -1,9 +1,12 @@
 import pyttsx3
-from TTS.utils.synthesizer import Synthesizer
-from TTS.utils.manage import ModelManager
+# from TTS.utils.synthesizer import Synthesizer
+# from TTS.utils.manage import ModelManager
 from gtts import gTTS
+import TTS.utils.synthesizer as synthesizer
+import TTS as tts
 import boto3
 import os
+
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/path/to/your/keyfile.json"  # put actual path here
 
 
@@ -46,3 +49,30 @@ def text_to_speech_google(text, output_file, language_model):
 #    audio = synthesize(text)
 #    audio.save(output_file)
 #    play_audio(output_file)
+
+
+# import gdown
+
+
+# mozilla_models = {
+#     'en': {
+#         'low': 'https://github.com/mozilla/TTS/releases/download/en/tts_models--en--ljspeech--tacotron2-DCA/model_file.pth.tar',
+#         'high': 'https://github.com/mozilla/TTS/releases/download/en/tts_models--en--ljspeech--tacotron2-DCA/model_file.pth.tar'
+#     },
+#     'es': {
+#         'low': 'https://github.com/mozilla/TTS/releases/download/en/tts_models--en--ljspeech--tacotron2-DCA/model_file.pth.tar',
+#         'high': 'https://github.com/mozilla/TTS/releases/download/en/tts_models--en--ljspeech--tacotron2-DCA/model_file.pth.tar'
+#     }
+# }
+#
+#
+# def download_model(language, level):
+#     model_url = mozilla_models[language]
+#     output_path = f"mozillamodels/{language}/{level}/model_file.pth.tar"
+#     gdown.download(model_url, output_path, quiet=False)  # Set quiet=False to see download progress
+
+
+def text_to_speech_mozilla(text, output_file, language_model):
+    voice_synthesizer = synthesizer.Synthesizer()
+    voice_synthesizer.vocoder_model("vocoder_models/universal/libri-tts/wavegrad")
+    voice_synthesizer.tts(text='Hola, como estas?')

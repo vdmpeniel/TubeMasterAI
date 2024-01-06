@@ -1,24 +1,32 @@
-import time
-import media_processor
-import translator
-import media_downloader
-
-import telemetry
+# import time
+# import media_processor
+# import translator
+# import media_downloader
+#
+# import telemetry
+import synthesizer
+import file_manager
 
 
 def main(title):
     print(title)
 
-    processor = media_processor.MediaProcessor(
-        '123',
-        '001'
+    synthesizer.text_to_speech_coqui_single_speaker(
+        'Hola, como estas?',
+        './workdirectory/123/output.wav',
+        'es'
     )
 
-    vd_options = {
-        'url': 'https://player-vz-96dbff48-568.tv.pandavideo.com/embed/?v=db4d860f-15e7-4730-8d89-69066c9b0fa3',
-        'video_filename': 'video1.mkv',
-    }
-    processor.video_download_node(vd_options)
+    # processor = media_processor.MediaProcessor(
+    #     '123',
+    #     '001'
+    # )
+
+    # vd_options = {
+    #     'url': 'https://player-vz-96dbff48-568.tv.pandavideo.com/embed/?v=db4d860f-15e7-4730-8d89-69066c9b0fa3',
+    #     'video_filename': 'video1.mkv',
+    # }
+    # processor.video_download_node(vd_options)
 
     # vtta_options = {
     #     'video_filename': 'video1.mkv',
@@ -44,5 +52,27 @@ def main(title):
     # print(translation)
 
 
+import re
+
+
+def find_operators(text):
+    location = re.search(r'==|~=|>=|<=', text)
+    return location
+
+
+def remove_versions():
+    reqs = file_manager.read('requirements.txt')
+    req_list = reqs.split('\n')
+    new_list = []
+    for req in req_list:
+        position = find_operators(req)
+        position = len(req) if position is None else position.span()[0]
+        new_list.append(req[0:position])
+
+    data = '\n'.join(new_list)
+    file_manager.save(data, 'requirements.txt', 'w')
+
+
 if __name__ == '__main__':
     main('Welcome to AudioMaster!')
+    # remove_versions()

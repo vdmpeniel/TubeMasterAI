@@ -17,6 +17,11 @@ def save(data, file_path, mode='w'):
         file.write(data)
 
 
+def read(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return file.read()
+
+
 def remove_extension(file_name):
     base_name, _ = os.path.splitext(file_name)
     return base_name
