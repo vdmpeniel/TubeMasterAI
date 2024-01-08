@@ -1,5 +1,5 @@
 # import time
-# import media_processor
+import media_processor
 # import translator
 # import media_downloader
 #
@@ -10,17 +10,17 @@ import file_manager
 
 def main(title):
     print(title)
-
+    text = file_manager.read('./workdirectory/123/text.txt')
     synthesizer.text_to_speech_coqui_single_speaker(
-        'Hola, como estas?',
+        text,
         './workdirectory/123/output.wav',
         'es'
     )
 
-    # processor = media_processor.MediaProcessor(
-    #     '123',
-    #     '001'
-    # )
+    processor = media_processor.MediaProcessor(
+        '123',
+        '001'
+    )
 
     # vd_options = {
     #     'url': 'https://player-vz-96dbff48-568.tv.pandavideo.com/embed/?v=db4d860f-15e7-4730-8d89-69066c9b0fa3',
