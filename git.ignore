@@ -1,4 +1,4 @@
-#workdirectory/**
+workdirectory/**
 mozillamodels/**
 __pycache__/**
 .venv/**

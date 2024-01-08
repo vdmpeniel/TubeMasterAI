@@ -5,13 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="904e8309-1817-430a-91fc-01e7bd0e1c36" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/workdirectory/123/text.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/TubeMasterAI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TubeMasterAI.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NOTES.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/synthesizer_coqui.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/synthesizer_mz.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/workdirectory/123/001/video1.mkv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/workdirectory/123/first_complete_audio.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/workdirectory/123/generated_voice.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/workdirectory/123/output.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/workdirectory/123/speaker_output.wav" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/git.ignore" beforeDir="false" afterPath="$PROJECT_DIR$/git.ignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synthesizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/synthesizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/synthesizer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/workdirectory/123/text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/workdirectory/123/text.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +51,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python.main.executor": "Debug",
+    "Python.main.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
@@ -129,24 +135,29 @@
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>71</line>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>13</line>
-          <option name="timeStamp" value="25" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/speech_synthesizer.py</url>
           <line>75</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>76</line>
-          <option name="timeStamp" value="27" />
+          <line>14</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/synthesizer_coqui.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/synthesizer_coqui.py</url>
+          <line>22</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/synthesizer_coqui.py</url>
+          <line>30</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

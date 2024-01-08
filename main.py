@@ -4,29 +4,58 @@ import media_processor
 # import media_downloader
 #
 # import telemetry
-import synthesizer
+import synthesizer_coqui
 import file_manager
+import re
 
 
 def main(title):
     print(title)
-    text = file_manager.read('./workdirectory/123/text.txt')
-    synthesizer.text_to_speech_coqui_single_speaker(
-        text,
-        './workdirectory/123/output.wav',
-        'es'
-    )
 
     processor = media_processor.MediaProcessor(
         '123',
         '001'
     )
-
-    # vd_options = {
-    #     'url': 'https://player-vz-96dbff48-568.tv.pandavideo.com/embed/?v=db4d860f-15e7-4730-8d89-69066c9b0fa3',
+    #
+    # processor.video_download_node({
+    #     'url': 'https://www.youtube.com/shorts/X9lJojo9-cQ',
     #     'video_filename': 'video1.mkv',
-    # }
-    # processor.video_download_node(vd_options)
+    # })
+    #
+    # processor.extract_audio({
+    #     'video_file_path': './workdirectory/123/001/video1.mkv',
+    #     'output_audio_path': './workdirectory/123/speaker_output.wav'
+    # })
+
+    text = file_manager.read('./workdirectory/123/text.txt')
+    # processor.create_voice({
+    #     'text': text,
+    #     'generated_voice_path': './workdirectory/123/generated_voice.wav',
+    #     'gtts_model': 'es'
+    # })
+
+    # synthesizer.text_to_speech_coqui_single_speaker(
+    #     text,
+    #     './workdirectory/123/output.wav',
+    #     'es'
+    # )
+
+    synthesizer.text_to_speech_coqui_cloning(
+        text,
+        './workdirectory/123/speaker_output.wav',
+        './workdirectory/123/output.wav',
+        'es'
+    )
+
+    # synthesizer.text_to_speech_coqui_multiple_speaker(
+    #     text=text,
+    #     output_file='./workdirectory/123/output.wav',
+    #     language_model='es',
+    #     speaker_name='Claribel Dervla'
+    # )
+
+
+
 
     # vtta_options = {
     #     'video_filename': 'video1.mkv',
@@ -50,9 +79,6 @@ def main(title):
     #     100
     # )
     # print(translation)
-
-
-import re
 
 
 def find_operators(text):
