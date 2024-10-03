@@ -1,0 +1,10 @@
+torch
+gtts
+vosk
+spacy
+language_tool_python
+boto3
+google.cloud
+speech_recognition
+TTS
+argostranslate
