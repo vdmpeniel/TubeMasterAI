@@ -30,13 +30,13 @@ def simple_model_reader(model, text, output_file_path):
 def main(title):
     print(title)
 
-    model = 'tts_models/en/vctk/vits',
+    model = 'tts_models/en/vctk/vits'
     text_file_path = './workdirectory/123/text.txt'
-    output_file_path = './workdirectory/123/output'
+    output_file_path = './workdirectory/123/output.wav'
     text = file_manager.read(text_file_path)
 
     # simple_model_reader(model, text, output_file_path)
-    synthesizer.vctk_vits_model_reader(text, model, 'p234', output_file_path)
+    synthesizer.vctk_vits_model_reader(text=text, model=model, speaker='p234', output_path=output_file_path)
 
 
 

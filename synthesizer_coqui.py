@@ -49,9 +49,9 @@ def text_to_speech_coqui_cloning(text, speaker_wav, output_file, language='en'):
 
 
 # VCTK VITS
-def vctk_vits_model_reader(text, model='tts_models/en/vctk/vits', speaker='p225', output_path='./'):
+def vctk_vits_model_reader(text, model='tts_models/en/vctk/vits', speaker='p225', output_path='./output.wav'):
     tts = TTS(model)
-    tts.tts_to_file(text=text, speaker=speaker, file_path=output_path + '_' + speaker + '.wav')
+    tts.tts_to_file(text=text, speaker=speaker, file_path=output_path)
 
 def get_vctk_vits_speakers_list(model='tts_models/en/vctk/vits'):
     tts = TTS(model)
