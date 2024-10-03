@@ -1,10 +1,11 @@
 # import time
+from TTS.tts.datasets import emotion
 
 import media_processor
 # import translator
 # import media_downloader
 #
-# import telemetry
+import telemetry
 import synthesizer_coqui as synthesizer
 import file_manager
 import re
@@ -30,15 +31,25 @@ def simple_model_reader(model, text, output_file_path):
 def main(title):
     print(title)
 
+    tmtry = telemetry.Telemetry()
+    tmtry.start()
     model = 'tts_models/en/vctk/vits'
     text_file_path = './workdirectory/123/text.txt'
     output_file_path = './workdirectory/123/output.wav'
     text = file_manager.read(text_file_path)
 
+
     # simple_model_reader(model, text, output_file_path)
-    synthesizer.vctk_vits_model_reader(text=text, model=model, speaker='p234', output_path=output_file_path)
-
-
+    synthesizer.vctk_vits_model_reader(
+        text=text,
+        model=model,
+        speaker='p230',
+        output_path=output_file_path,
+        emotion='Happy',
+        speed=0.8
+    )
+    # synthesizer.create_vctk_vits_model_voice_sampler(model=model, output_path='./workdirectory/123/')
+    print(f'Telemetry: {tmtry.stop()}')
 
     # processor = media_processor.MediaProcessor(
     #     '123',
