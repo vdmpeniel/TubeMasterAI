@@ -26,31 +26,46 @@ def simple_model_reader(model, text, output_file_path):
     )
 
 
+def parse_bible_text(text):
+    bible_obj = {}
+    lines = text.split()
+    lines = [line for line in lines if line != '']
+
+    for line in lines:
+        matches = re.findall(r"\d+:\d+", text)
+        if not matches:
+            print(f'Book name: {line}')
+            continue
+        else:
+            print(f'Verse: {line}')
+
+
+
+def read_the_bible(bible_source):
+    tlmtry = telemetry.Telemetry()
+    tlmtry.start()
+    model = 'tts_models/en/vctk/vits'
+    text_file_path = bible_source
+    output_file_path = './workdirectory/KJV/output.wav'
+    text = file_manager.read(text_file_path)
+
+    # synthesizer.vctk_vits_model_reader(
+    #     text=text,
+    #     model=model,
+    #     speaker='p230',
+    #     output_path=output_file_path,
+    #     emotion='Happy',
+    #     speed=0.1
+    # )
+    # print(f'Telemetry: {tmtry.stop()}')
 
 
 def main(title):
     print(title)
-
-    tmtry = telemetry.Telemetry()
-    tmtry.start()
-    model = 'tts_models/en/vctk/vits'
-    text_file_path = './workdirectory/123/text.txt'
-    output_file_path = './workdirectory/123/output.wav'
-    text = file_manager.read(text_file_path)
-
+    read_the_bible('./workdirectory/KJV/kjv_bible.txt')
 
     # simple_model_reader(model, text, output_file_path)
-    synthesizer.vctk_vits_model_reader(
-        text=text,
-        model=model,
-        speaker='p230',
-        output_path=output_file_path,
-        emotion='Happy',
-        speed=0.8
-    )
     # synthesizer.create_vctk_vits_model_voice_sampler(model=model, output_path='./workdirectory/123/')
-    print(f'Telemetry: {tmtry.stop()}')
-
     # processor = media_processor.MediaProcessor(
     #     '123',
     #     '001'
