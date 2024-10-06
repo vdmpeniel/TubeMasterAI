@@ -64,14 +64,13 @@ def parse_bible_text(text):
     for i, line in tqdm.tqdm(enumerate(lines), total=len(lines)):
         # print(f'Processing line: {line}')
         matches = re.findall(r'(\d+:\d+)\s*(.*)', line)
-        if (
+        if ( # new chapter title is found
             not matches
             and ('<<<' in line)
             and (line[0].isupper())
             and (not re.search(r'[.,;:]', line[-4]))
         ):
             if len(book_obj) > 0:
-
                 book_obj['content'] = content
                 bible_obj['books'].append(book_obj)
                 book_obj = {}
@@ -80,12 +79,15 @@ def parse_bible_text(text):
             book_obj['name'] = line.replace('<<<', '')
             continue
 
-        line = line.replace('<<<', '')
+        # actual text(verses or floating text)
+        # floating verse (no verse reference)
+        line = line.replace('<<<', '') # a few floating text lines were marked as titles
         if not matches and len(content) > 1:
             # print(f'Account for this --> {line}')
             content[-1]['text'] = content[-1]['text'] + ' ' + line
             continue
 
+        # new verse/s by verse reference(chapter:verse)
         for match in matches:
             verse = {
                 'reference': match[0],
