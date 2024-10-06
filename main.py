@@ -1,5 +1,6 @@
 # import time
-from TTS.tts.datasets import emotion
+#from TTS.tts.datasets import emotion
+from matplotlib.pyplot import title
 
 import media_processor
 # import translator
@@ -9,7 +10,9 @@ import telemetry
 import synthesizer_coqui as synthesizer
 import file_manager
 import re
-from TTS.api import TTS
+import tqdm
+from collections import deque
+#from TTS.api import TTS
 
 
 def simple_model_reader(model, text, output_file_path):
@@ -26,19 +29,76 @@ def simple_model_reader(model, text, output_file_path):
     )
 
 
+def verify_verses(bible_obj):
+    print(f"Number of books: {len(bible_obj['books'])}")
+    for book in bible_obj['books']:
+        for verse in book['content']:
+            print(f'{verse["reference"]} - {verse["text"]}')
+            if not verse['text']:
+                raise Exception(f'{book["name"]}-{verse["reference"]} is empty.')
+
+
 def parse_bible_text(text):
     bible_obj = {}
-    lines = text.split()
-    lines = [line for line in lines if line != '']
 
-    for line in lines:
-        matches = re.findall(r"\d+:\d+", text)
-        if not matches:
-            print(f'Book name: {line}')
+    print('Adding title markings...')
+    text = text.replace('\n\n\n', '<<<\n\n')
+
+    print('Removing extra EOL characters...')
+    text = text.replace('\n\n', '|').replace('\n', ' ')
+
+    print('Splitting text lines...')
+    lines = [line.strip() for line in text.split('|') if line not in ['', '\n']]
+
+    print('Extracting source title...')
+    bible_obj['source_title'] = lines.pop(0)
+    print(f"Book Title: {bible_obj['source_title']}")
+    # print(lines)
+    # input("Press any key to continue...")
+
+    # TODO: dividing the content in chapters
+    print('Creating Bible Object...')
+    bible_obj['books'] = []
+    book_obj = {}
+    content = []
+    for i, line in tqdm.tqdm(enumerate(lines), total=len(lines)):
+        # print(f'Processing line: {line}')
+        matches = re.findall(r'(\d+:\d+)\s*(.*)', line)
+        if (
+            not matches
+            and ('<<<' in line)
+            and (line[0].isupper())
+            and (not re.search(r'[.,;:]', line[-4]))
+        ):
+            if len(book_obj) > 0:
+
+                book_obj['content'] = content
+                bible_obj['books'].append(book_obj)
+                book_obj = {}
+                content = []
+
+            book_obj['name'] = line.replace('<<<', '')
             continue
-        else:
-            print(f'Verse: {line}')
 
+        line = line.replace('<<<', '')
+        if not matches and len(content) > 1:
+            # print(f'Account for this --> {line}')
+            content[-1]['text'] = content[-1]['text'] + ' ' + line
+            continue
+
+        for match in matches:
+            verse = {
+                'reference': match[0],
+                'text': match[1]
+            }
+            content.append(verse)
+
+    bible_obj['books'].append(book_obj)
+    book_obj['content'] = content
+
+
+    # print(bible_obj)
+    # verify_verses(bible_obj)
 
 
 def read_the_bible(bible_source):
@@ -46,8 +106,9 @@ def read_the_bible(bible_source):
     tlmtry.start()
     model = 'tts_models/en/vctk/vits'
     text_file_path = bible_source
-    output_file_path = './workdirectory/KJV/output.wav'
+    output_file_path = bible_source.removesuffix('.txt') + '.wav'
     text = file_manager.read(text_file_path)
+    parse_bible_text(text)
 
     # synthesizer.vctk_vits_model_reader(
     #     text=text,
@@ -57,7 +118,7 @@ def read_the_bible(bible_source):
     #     emotion='Happy',
     #     speed=0.1
     # )
-    # print(f'Telemetry: {tmtry.stop()}')
+    print(f'Telemetry: {tlmtry.stop()}')
 
 
 def main(title):

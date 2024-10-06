@@ -5,11 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="904e8309-1817-430a-91fc-01e7bd0e1c36" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/workdirectory/KJV/kvj_bible.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/workdirectory/KJV/kjv_bible.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/git.ignore" beforeDir="false" afterPath="$PROJECT_DIR$/git.ignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/workdirectory/123/output.wav" beforeDir="false" afterPath="$PROJECT_DIR$/workdirectory/123/output.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/workdirectory/123/text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/workdirectory/123/text.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python_packages_and_environment_manual.md" beforeDir="false" afterPath="$PROJECT_DIR$/python_package_management_manual.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workdirectory/KJV/kvj_bible.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,19 +149,19 @@
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>157</line>
-          <option name="timeStamp" value="36" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>63</line>
-          <option name="timeStamp" value="37" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/synthesizer_coqui.py</url>
           <line>52</line>
           <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>70</line>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>229</line>
+          <option name="timeStamp" value="41" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
