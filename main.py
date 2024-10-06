@@ -1,6 +1,5 @@
 # import time
 #from TTS.tts.datasets import emotion
-from matplotlib.pyplot import title
 
 import media_processor
 # import translator
@@ -28,18 +27,35 @@ def simple_model_reader(model, text, output_file_path):
         model=model
     )
 
+def get_book_short_name(book_number):
+    # print(f'Book Number: {book_number}')
+    short_names = [   'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges',
+    'Ruth', '1 Samuel', '2 Samuel', '1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles',
+    'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs', 'Ecclesiastes',
+    'Song of Solomon', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel',
+    'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah', 'Micah', 'Nahum', 'Habakkuk',
+    'Zephaniah', 'Haggai', 'Zechariah', 'Malachi', 'Matthew', 'Mark', 'Luke', 'John',
+    'Acts', 'Romans', '1 Corinthians', '2 Corinthians', 'Galatians', 'Ephesians',
+    'Philippians', 'Colossians', '1 Thessalonians', '2 Thessalonians', '1 Timothy',
+    '2 Timothy', 'Titus', 'Philemon', 'Hebrews', 'James', '1 Peter', '2 Peter',
+    '1 John', '2 John', '3 John', 'Jude', 'Revelation']
+    return short_names[book_number]
 
 def verify_verses(bible_obj):
     print(f"Number of books: {len(bible_obj['books'])}")
     for book in bible_obj['books']:
-        for verse in book['content']:
-            print(f'{verse["reference"]} - {verse["text"]}')
-            if not verse['text']:
-                raise Exception(f'{book["name"]}-{verse["reference"]} is empty.')
+        for chapter in book['content']:
+            for verse in chapter:
+                print(f'{verse["reference"]} - {verse["text"]}')
+                if not verse['text']:
+                    raise Exception(f'{book["name"]}-{verse["reference"]} is empty.')
 
 
 def parse_bible_text(text):
     bible_obj = {}
+
+    # remove New Testament Marker
+    text = re.sub(r'\*{3}\n+.*\n+', '', text)
 
     print('Adding title markings...')
     text = text.replace('\n\n\n', '<<<\n\n')
@@ -61,22 +77,26 @@ def parse_bible_text(text):
     bible_obj['books'] = []
     book_obj = {}
     content = []
+    chapter = []
     for i, line in tqdm.tqdm(enumerate(lines), total=len(lines)):
         # print(f'Processing line: {line}')
         matches = re.findall(r'(\d+:\d+)\s*(.*)', line)
-        if ( # new chapter title is found
+        if ( # new book title is found
             not matches
             and ('<<<' in line)
             and (line[0].isupper())
             and (not re.search(r'[.,;:]', line[-4]))
         ):
             if len(book_obj) > 0:
+                content.append(chapter)
                 book_obj['content'] = content
                 bible_obj['books'].append(book_obj)
                 book_obj = {}
                 content = []
+                chapter = []
 
             book_obj['name'] = line.replace('<<<', '')
+            book_obj['short_name'] = get_book_short_name(len(bible_obj['books']))
             continue
 
         # actual text(verses or floating text)
@@ -84,34 +104,54 @@ def parse_bible_text(text):
         line = line.replace('<<<', '') # a few floating text lines were marked as titles
         if not matches and len(content) > 1:
             # print(f'Account for this --> {line}')
-            content[-1]['text'] = content[-1]['text'] + ' ' + line
+            chapter[-1]['text'] = chapter[-1]['text'] + ' ' + line
             continue
 
         # new verse/s by verse reference(chapter:verse)
-        for match in matches:
-            verse = {
-                'reference': match[0],
-                'text': match[1]
-            }
-            content.append(verse)
+        if matches:
+            for match in matches:
+                verse = {
+                    'reference': match[0],
+                    'text': match[1]
+                }
+                if re.search(r":(\d+)", match[0]).group(1) == '1' and chapter:
+                    content.append(chapter)
+                    chapter = []
+                chapter.append(verse)
 
-    bible_obj['books'].append(book_obj)
+    content.append(chapter)
     book_obj['content'] = content
-
-
+    bible_obj['books'].append(book_obj)
     # print(bible_obj)
     # verify_verses(bible_obj)
+    # for book in bible_obj['books']:
+    #     print(f'"{book["name"]}" --- "{book["short_name"]}"')
+    return bible_obj
 
 
-def read_the_bible(bible_source):
-    tlmtry = telemetry.Telemetry()
-    tlmtry.start()
+def collect_bible_book_chapter(chapter, i):
+    text = 'Chapter ' + str(i + 1) + '\n'
+    for verse in chapter:
+        text = text + verse['text'] + '\n'
+    return text
+
+
+def collect_bible_book(bible_obj, book):
+    text = bible_obj['books'][book]['name'] + '\n'
+    content = bible_obj['books'][book]['content']
+    for i, chapter in enumerate(content):
+        text = text + collect_bible_book_chapter(chapter, i)
+        text = text + '\n\n'
+    return text
+
+
+def read_book(path, book_title, text):
+    filename = book_title.lower().replace(' ', '_') + '.wav'
+    output_file_path = path + '/' + filename
+    print(output_file_path)
+
     model = 'tts_models/en/vctk/vits'
-    text_file_path = bible_source
-    output_file_path = bible_source.removesuffix('.txt') + '.wav'
-    text = file_manager.read(text_file_path)
-    parse_bible_text(text)
-
+    print(f'Reading book: {book_title}')
     # synthesizer.vctk_vits_model_reader(
     #     text=text,
     #     model=model,
@@ -120,12 +160,26 @@ def read_the_bible(bible_source):
     #     emotion='Happy',
     #     speed=0.1
     # )
+
+
+
+def read_bible_book(path, bible_file, book_number):
+    tlmtry = telemetry.Telemetry()
+    tlmtry.start()
+    text_file_path = path + '/' + bible_file
+
+    original_text = file_manager.read(text_file_path)
+    bible_obj = parse_bible_text(original_text)
+    text = collect_bible_book(bible_obj, book_number)
+    # print(text)
+
+    read_book(path, bible_obj['books'][book_number]['short_name'], text)
     print(f'Telemetry: {tlmtry.stop()}')
 
 
 def main(title):
     print(title)
-    read_the_bible('./workdirectory/KJV/kjv_bible.txt')
+    read_bible_book('./workdirectory/KJV', 'kjv_bible.txt', 44)
 
     # simple_model_reader(model, text, output_file_path)
     # synthesizer.create_vctk_vits_model_voice_sampler(model=model, output_path='./workdirectory/123/')
@@ -143,7 +197,6 @@ def main(title):
     #     'video_file_path': './workdirectory/123/001/video1.mkv',
     #     'output_audio_path': './workdirectory/123/speaker_output.wav'
     # })
-
 
     # processor.create_voice({
     #     'text': text,
@@ -171,9 +224,6 @@ def main(title):
     #     language_model='es',
     #     speaker_name='Claribel Dervla'
     # )
-
-
-
 
     # vtta_options = {
     #     'video_filename': 'video1.mkv',
