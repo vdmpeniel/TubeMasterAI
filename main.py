@@ -146,11 +146,7 @@ def collect_bible_book(bible_obj, book):
     return text
 
 
-def read_text(path, book_title, text):
-    filename = book_title.lower().replace(' ', '_') + '.wav'
-    output_file_path = path + '/' + filename
-    print(output_file_path)
-
+def read_text(book_title, text, output_file_path):
     model = 'tts_models/en/vctk/vits'
     print(f'Reading book: {book_title}...')
     synthesizer.vctk_vits_model_reader(
@@ -159,42 +155,50 @@ def read_text(path, book_title, text):
         speaker='p230',
         output_path=output_file_path,
         emotion='Happy',
-        speed=0.1
+        speed=0.02
     )
 
 
-def read_bible_book_chapter_by_chapter(path, book):
+def read_bible_book_chapter_by_chapter(book, source_path, override=False):
     book_title = book['short_name']
     book_full_title = book['name']
-    path_subdiretory = path + '/' + book_title.lower().replace(' ', '_')
-    file_manager.create_folder(path_subdiretory)
+    subdirectory_path = source_path + '/' + book_title.lower().replace(' ', '_')
+    file_manager.create_folder(subdirectory_path)
 
-    text = book_full_title + '\n'
+    text = book_full_title + '.\n'
     for i, chapter in enumerate(book['content']):
-        text = text + collect_bible_book_chapter(chapter, i)
-        print(text)
-        read_text(path_subdiretory, book_title, text)
-        text = ''
+        filename = book_title.lower().replace(' ', '_') + f'_chapter_{i + 1}.wav'
+        output_file_path = subdirectory_path + '/' + filename
+        if override or not file_manager.exist(output_file_path):
+            text = text + collect_bible_book_chapter(chapter, i)
+            print(text)
+            read_text(book_title, text, output_file_path)
+            text = ''
 
 
-# this is too much for my pc resources
-def read_full_bible_book(path, bible_file, book_number):
-    text_file_path = path + '/' + bible_file
-    original_text = file_manager.read(text_file_path)
-    bible_obj = parse_bible_text(original_text)
-    short_name = bible_obj['books'][book_number]['short_name']
-    text = collect_bible_book(bible_obj, book_number)
-    # print(text)
-    read_text(path, short_name, text)
-
-
-def read_bible_chapter_by_chapter(path, bible_file):
-    source_file_path = path + '/' + bible_file
+def read_bible_chapter_by_chapter(source_path, source_filename):
+    source_file_path = source_path + '/' + source_filename
     original_text = file_manager.read(source_file_path)
     bible_obj = parse_bible_text(original_text)
     books = bible_obj['books']
     for book in books:
-        read_bible_book_chapter_by_chapter(path, book)
+        read_bible_book_chapter_by_chapter(book, source_path)
+
+
+# this is too much for my pc resources
+def read_full_bible_book(source_file_path, source_filename, book_number, override=False):
+    original_text = file_manager.read(source_file_path + '/' + source_filename)
+    bible_obj = parse_bible_text(original_text)
+    book_title = bible_obj['books'][book_number]['short_name']
+    text = collect_bible_book(bible_obj, book_number)
+    # print(text)
+
+    subdirectory_path = source_file_path + '/' + book_title.lower().replace(' ', '_') + '_full_book'
+    file_manager.create_folder(subdirectory_path)
+    filename = book_title.lower().replace(' ', '_') + '.wav'
+    output_file_path = subdirectory_path + '/' + filename
+    if override or not file_manager.exist(output_file_path):
+        read_text(book_title, text, output_file_path)
 
 
 
