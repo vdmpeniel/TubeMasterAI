@@ -32,7 +32,7 @@ def exist(path):
 
 
 def create_folder(folder_path):
-    if os.path.isdir(folder_path):
+    if not os.path.isdir(folder_path):
         os.makedirs(folder_path, exist_ok=True)
         print(f"The folder '{folder_path}' has been created.")
     else:

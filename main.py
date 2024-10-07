@@ -1,5 +1,6 @@
 # import time
 #from TTS.tts.datasets import emotion
+from numba import short
 
 import media_processor
 # import translator
@@ -145,41 +146,59 @@ def collect_bible_book(bible_obj, book):
     return text
 
 
-def read_book(path, book_title, text):
+def read_text(path, book_title, text):
     filename = book_title.lower().replace(' ', '_') + '.wav'
     output_file_path = path + '/' + filename
     print(output_file_path)
 
     model = 'tts_models/en/vctk/vits'
-    print(f'Reading book: {book_title}')
-    # synthesizer.vctk_vits_model_reader(
-    #     text=text,
-    #     model=model,
-    #     speaker='p230',
-    #     output_path=output_file_path,
-    #     emotion='Happy',
-    #     speed=0.1
-    # )
+    print(f'Reading book: {book_title}...')
+    synthesizer.vctk_vits_model_reader(
+        text=text,
+        model=model,
+        speaker='p230',
+        output_path=output_file_path,
+        emotion='Happy',
+        speed=0.1
+    )
 
 
-
-def read_bible_book(path, bible_file, book_number):
+def read_bible_book_chapter_by_chapter(path, bible_file, book_number):
     tlmtry = telemetry.Telemetry()
     tlmtry.start()
     text_file_path = path + '/' + bible_file
-
     original_text = file_manager.read(text_file_path)
     bible_obj = parse_bible_text(original_text)
+    book = bible_obj['books'][book_number]
+    book_title = book['short_name']
+
+    path_subdiretory = path + '/' + book_title.lower().replace(' ', '_')
+    file_manager.create_folder(path_subdiretory)
+
+    for i, chapter in enumerate(book['content']):
+        text = collect_bible_book_chapter(chapter, i)
+        print(text)
+        read_text(path_subdiretory, book_title, text)
+    print(f'Telemetry: {tlmtry.stop()}')
+
+# this is too much for my pc resources
+def read_full_bible_book(path, bible_file, book_number):
+    tlmtry = telemetry.Telemetry()
+    tlmtry.start()
+    text_file_path = path + '/' + bible_file
+    original_text = file_manager.read(text_file_path)
+    bible_obj = parse_bible_text(original_text)
+    short_name = bible_obj['books'][book_number]['short_name']
     text = collect_bible_book(bible_obj, book_number)
     # print(text)
-
-    read_book(path, bible_obj['books'][book_number]['short_name'], text)
+    read_text(path, short_name, text)
     print(f'Telemetry: {tlmtry.stop()}')
 
 
 def main(title):
     print(title)
-    read_bible_book('./workdirectory/KJV', 'kjv_bible.txt', 44)
+    # read_full_bible_book('./workdirectory/KJV', 'kjv_bible.txt', 44)
+    read_bible_book_chapter_by_chapter('./workdirectory/KJV', 'kjv_bible.txt', 44)
 
     # simple_model_reader(model, text, output_file_path)
     # synthesizer.create_vctk_vits_model_voice_sampler(model=model, output_path='./workdirectory/123/')
