@@ -163,28 +163,22 @@ def read_text(path, book_title, text):
     )
 
 
-def read_bible_book_chapter_by_chapter(path, bible_file, book_number):
-    tlmtry = telemetry.Telemetry()
-    tlmtry.start()
-    text_file_path = path + '/' + bible_file
-    original_text = file_manager.read(text_file_path)
-    bible_obj = parse_bible_text(original_text)
-    book = bible_obj['books'][book_number]
+def read_bible_book_chapter_by_chapter(path, book):
     book_title = book['short_name']
-
+    book_full_title = book['name']
     path_subdiretory = path + '/' + book_title.lower().replace(' ', '_')
     file_manager.create_folder(path_subdiretory)
 
+    text = book_full_title + '\n'
     for i, chapter in enumerate(book['content']):
-        text = collect_bible_book_chapter(chapter, i)
+        text = text + collect_bible_book_chapter(chapter, i)
         print(text)
         read_text(path_subdiretory, book_title, text)
-    print(f'Telemetry: {tlmtry.stop()}')
+        text = ''
+
 
 # this is too much for my pc resources
 def read_full_bible_book(path, bible_file, book_number):
-    tlmtry = telemetry.Telemetry()
-    tlmtry.start()
     text_file_path = path + '/' + bible_file
     original_text = file_manager.read(text_file_path)
     bible_obj = parse_bible_text(original_text)
@@ -192,13 +186,27 @@ def read_full_bible_book(path, bible_file, book_number):
     text = collect_bible_book(bible_obj, book_number)
     # print(text)
     read_text(path, short_name, text)
-    print(f'Telemetry: {tlmtry.stop()}')
+
+
+def read_bible_chapter_by_chapter(path, bible_file):
+    source_file_path = path + '/' + bible_file
+    original_text = file_manager.read(source_file_path)
+    bible_obj = parse_bible_text(original_text)
+    books = bible_obj['books']
+    for book in books:
+        read_bible_book_chapter_by_chapter(path, book)
+
 
 
 def main(title):
     print(title)
+    tlmtry = telemetry.Telemetry()
+    tlmtry.start()
     # read_full_bible_book('./workdirectory/KJV', 'kjv_bible.txt', 44)
-    read_bible_book_chapter_by_chapter('./workdirectory/KJV', 'kjv_bible.txt', 44)
+    read_bible_chapter_by_chapter('./workdirectory/KJV', 'kjv_bible.txt')
+    print(f'Telemetry: {tlmtry.stop()}')
+
+
 
     # simple_model_reader(model, text, output_file_path)
     # synthesizer.create_vctk_vits_model_voice_sampler(model=model, output_path='./workdirectory/123/')
