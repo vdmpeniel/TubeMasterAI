@@ -5,7 +5,7 @@ from absl.logging import exception
 
 def get_model_list():
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f'Model List: {TTS().list_models().list_tts_models()}')
+    return TTS().list_models().list_tts_models()
 
 def get_model_speaker_list(model='tts_models/multilingual/multi-dataset/xtts_v2'):
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -25,8 +25,6 @@ def text_to_speech_coqui_multiple_speaker(text, output_file, model='tts_models/m
     device = "cuda" if torch.cuda.is_available() else "cpu"
     tts = TTS(model, progress_bar=True).to(device)
 
-    print(f'Is this a multi lingual model?: {tts.is_multi_lingual}')
-    print(f'Is this a multi speaker model?: {tts.is_multi_speaker}')
     if not tts.is_multi_speaker:
         raise Exception('Not a multi speaker model')
     tts.tts_to_file(text=text, speaker=speaker_name, language=language, file_path=output_file, split_sentences=True)
