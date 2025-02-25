@@ -75,6 +75,8 @@ Restart your terminal or run the following command to reload
 the configuration:
 
 source ~/.bashrc
+
+
 		
 
 ### Install the desired version of Python:
